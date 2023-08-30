@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://sability-ai.vercel.app/", "https://sability-ai.vercel.app"],
   optionsSuccessStatus: 200,
 };
 
@@ -39,16 +39,15 @@ app.post("/grammar-check", async (req, res) => {
     const queryResult = await MindsDB.SQL.runQuery(query);
     if (queryResult.rows.length > 0) {
       const matchingUserRow = queryResult.rows[0];
-      console.log(matchingUserRow);
       res.status(200).json({ queryResult: matchingUserRow });
     }
   } catch (error) {
-    console.error(`Error getting Mood: ${error}`);
-    res.status(500).send(`Error getting Mood: ${error}`);
+    console.error(` ${error}`);
+    res.status(500).send(` ${error}`);
   }
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   await connectToMindsDB();
   console.log(`Server is running on port ${PORT}`);
