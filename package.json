@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "ts-node src/app.ts",
-    "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/app.ts"
+    "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/app.ts",
+    "build": "npx tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13"
