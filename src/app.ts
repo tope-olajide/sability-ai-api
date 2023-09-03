@@ -34,12 +34,35 @@ app.get("/", async (req, res) => {
 app.post("/grammar-check", async (req, res) => {
   console.log(req.body.textData);
   const textData = req.body.textData;
-  const query = `SELECT response FROM mindsdb.grammar_checker_3 WHERE text="${textData}"`;
+  const query = `SELECT response FROM mindsdb.grammar_checker_5 WHERE text="${textData}"`;
   try {
     const queryResult = await MindsDB.SQL.runQuery(query);
     if (queryResult.rows.length > 0) {
-      const matchingUserRow = queryResult.rows[0];
-      res.status(200).json({ queryResult: matchingUserRow });
+      const response = queryResult.rows[0];
+      
+      res.status(200).json({ queryResult: response });
+    }
+  } catch (error) {
+    console.error(` ${error}`);
+    res.status(500).send(` ${error}`);
+  }
+});
+
+app.post("/paraphrase-text", async (req, res) => {
+  console.log(req.body.textData);
+  const textData = req.body.textData;
+  const mode = req.body.mode;
+  console.log(req.body.mode);
+  const query = `SELECT response from mindsdb.paraphraser_001
+  WHERE
+  mode = "${mode}" and
+  text = "${textData}"`;
+  try {
+    const queryResult = await MindsDB.SQL.runQuery(query);
+    if (queryResult.rows.length > 0) {
+      const response = queryResult.rows[0];
+      console.log({output:response})
+      res.status(200).json({ queryResult: response });
     }
   } catch (error) {
     console.error(` ${error}`);
