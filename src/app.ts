@@ -6,7 +6,11 @@ import bodyParser from "body-parser";
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://sability-ai.vercel.app/", "https://sability-ai.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "https://sability-ai.vercel.app/",
+    "https://sability-ai.vercel.app",
+  ],
   optionsSuccessStatus: 200,
 };
 
@@ -39,7 +43,7 @@ app.post("/grammar-check", async (req, res) => {
     const queryResult = await MindsDB.SQL.runQuery(query);
     if (queryResult.rows.length > 0) {
       const response = queryResult.rows[0];
-      
+
       res.status(200).json({ queryResult: response });
     }
   } catch (error) {
@@ -61,7 +65,29 @@ app.post("/paraphrase-text", async (req, res) => {
     const queryResult = await MindsDB.SQL.runQuery(query);
     if (queryResult.rows.length > 0) {
       const response = queryResult.rows[0];
-      console.log({output:response})
+      console.log({ output: response });
+      res.status(200).json({ queryResult: response });
+    }
+  } catch (error) {
+    console.error(` ${error}`);
+    res.status(500).send(` ${error}`);
+  }
+});
+
+app.post("/summarize-text", async (req, res) => {
+  console.log(req.body.textData);
+  const textData = req.body.textData;
+  const length = req.body.length;
+  console.log(req.body.length);
+  const query = `SELECT response from mindsdb.summarizer_001
+  WHERE
+  length = "${length}" and
+  text = "${textData}"`;
+  try {
+    const queryResult = await MindsDB.SQL.runQuery(query);
+    if (queryResult.rows.length > 0) {
+      const response = queryResult.rows[0];
+      console.log({ output: response });
       res.status(200).json({ queryResult: response });
     }
   } catch (error) {
