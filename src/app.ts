@@ -96,6 +96,28 @@ app.post("/summarize-text", async (req, res) => {
   }
 });
 
+app.post("/translate-text", async (req, res) => {
+  console.log(req.body.textData);
+  const textData = req.body.textData;
+  const language = req.body.language;
+  console.log(req.body.language);
+  const query = `SELECT response from mindsdb.translator_02
+  WHERE
+  language = "${language}" and
+  text = "${textData}"`;
+  try {
+    const queryResult = await MindsDB.SQL.runQuery(query);
+    if (queryResult.rows.length > 0) {
+      const response = queryResult.rows[0];
+      console.log({ output: response });
+      res.status(200).json({ queryResult: response });
+    }
+  } catch (error) {
+    console.error(` ${error}`);
+    res.status(500).send(` ${error}`);
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   await connectToMindsDB();
