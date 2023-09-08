@@ -38,7 +38,7 @@ app.get("/", async (req, res) => {
 app.post("/grammar-check", async (req, res) => {
   console.log(req.body.textData);
   const textData = req.body.textData;
-  const query = `SELECT response FROM mindsdb.grammar_checker_10_9_1 WHERE text="${textData}"`;
+  const query = `SELECT response FROM mindsdb.grammar_checker_10_9_1 WHERE text=’${textData}’`;
   try {
     const queryResult = await MindsDB.SQL.runQuery(query);
     if (queryResult.rows.length > 0) {
