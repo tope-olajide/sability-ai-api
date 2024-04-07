@@ -10,7 +10,7 @@ const app = express();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const corsOptions: cors.CorsOptions = {
   origin: [
-    "http://localhost:3000",
+   // "http://localhost:3000",
     "https://sabi-ai.vercel.app/",
     "https://sabi-ai.vercel.app",
   ],
